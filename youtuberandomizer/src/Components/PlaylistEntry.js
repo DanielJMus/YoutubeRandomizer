@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {addPlaylist} from '../Actions/action';
+import { fetchVideos } from '../Actions/action';
 
 class PlaylistEntry extends Component {
 
@@ -14,7 +13,7 @@ class PlaylistEntry extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.addPlaylist(this.state.url);
+        this.props.fetchVideos(this.state.url);
     }
 
     render (){
@@ -32,7 +31,9 @@ class PlaylistEntry extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({addPlaylist: addPlaylist}, dispatch)
+    return {
+        fetchVideos: (url) => dispatch(fetchVideos(url))
+    };
 }
 
 export default connect(null, mapDispatchToProps)(PlaylistEntry);
