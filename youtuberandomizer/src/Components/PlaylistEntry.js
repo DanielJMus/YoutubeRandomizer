@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { addPlaylist, fetchVideos } from '../Actions/action';
+import { fetchPlaylistInfo, fetchVideos } from '../Actions/action';
 
 class PlaylistEntry extends Component {
 
@@ -13,8 +13,23 @@ class PlaylistEntry extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.addPlaylist(this.state.url).then(() => {
-            this.props.fetchVideos(this.props.playlists);
+        this.props.fetchPlaylistInfo(this.state.url);
+    }
+
+    componentDidMount ()
+    {
+        // this.props.fetchVideos(this.props.playlists);
+    }
+
+    ListPlaylists () {
+        return this.props.playlists.map((item, i) => {
+            var url = `https://www.youtube.com/playlist?list=${item.id}`;
+            return (
+                <div className="playlist-item">
+                    <a className="playlist-title" href={url} key={i}>{item.snippet.title}<br></br></a>
+                    <button className="playlist-remove">Remove</button>
+                </div>
+            )
         });
     }
 
@@ -26,6 +41,13 @@ class PlaylistEntry extends Component {
                     <input className="playlist-input" name="url" type='text' onChange={e => this.setState({url: e.target.value})}/>
                     <input type="submit" value="Submit"/>
                 </form>
+                {
+                    this.props.playlists.length > 0 &&
+                    <div className="playlist-list">
+                        <h2>Current Playlists</h2>
+                        {this.ListPlaylists()}
+                    </div>
+                }
             </div>
         );
     }
@@ -44,7 +66,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addPlaylist: (url) => dispatch(addPlaylist(url)),
+        fetchPlaylistInfo: (url) => dispatch(fetchPlaylistInfo(url)),
         fetchVideos: (url) => dispatch(fetchVideos(url))
     };
 }

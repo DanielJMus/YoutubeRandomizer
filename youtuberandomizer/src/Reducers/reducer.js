@@ -33,7 +33,7 @@ export default (state = InitialState, action) => {
         case ADD_PLAYLIST:
             return {
                 ...state,
-                playlists: [...state.playlists, action.url]
+                playlists: [...state.playlists, action.playlist]
             };
         case DELETE_PLAYLIST:
             return {

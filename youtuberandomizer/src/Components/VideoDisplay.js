@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { fetchVideos } from '../Actions/action';
 
-class PlaylistDisplay extends Component {
+class VideoDisplay extends Component {
 
     constructor(props) {
         super(props);
@@ -44,4 +44,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlaylistDisplay);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoDisplay);

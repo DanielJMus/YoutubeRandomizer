@@ -35,22 +35,56 @@ export function setVideos (videos) {
     };
 }
 
-export function addPlaylist (url) {
+export function addPlaylist (playlist) {
+    return {
+        type: ADD_PLAYLIST,
+        playlist
+    }
+}
 
-    if (url.includes("?list="))
+export function fetchPlaylistInfo (playlistId) {
+
+    if (playlistId.includes("?list="))
     {
-        url = url.split("?list=")[1];
+        playlistId = playlistId.split("?list=")[1];
     }
 
     return dispatch => {
-        return new Promise((resolve, reject) => {
-            dispatch({
-                type: ADD_PLAYLIST,
-                url
+        dispatch(setFetchPending(true));
+        dispatch(setFetchSuccess(false));
+        dispatch(setFetchError(null));
+
+        sendPlaylistRequest(playlistId)
+            .then(playlist => {
+                console.log(playlist);
+                dispatch(setFetchPending(false));
+                dispatch(setFetchSuccess(true));
+                dispatch(addPlaylist(playlist));
             })
-            resolve();
-        });
+            .catch(error => {
+                dispatch(setFetchPending(false));
+                dispatch(setFetchError(error));
+            })
     }
+}
+
+export function sendPlaylistRequest (playlistId) {
+    console.log(playlistId);
+    return new Promise((resolve, reject) => {
+        YouTube.get('/playlists', {
+            params: {
+                id: playlistId,
+                part: 'snippet',
+                key: process.env.REACT_APP_API_KEY
+            }
+        }).then(playlist => {
+            return resolve(playlist.data.items[0]);
+        })
+        .catch(error => {
+            console.log(error);
+            return reject(error);
+        })
+    })
 }
 
 export function deletePlaylist (url) {
@@ -67,7 +101,7 @@ export function fetchVideos (playlists) {
         dispatch(setFetchError(null));
         dispatch(setVideos(null));
 
-        sendPlaylistRequest(playlists)
+        sendPlaylistVideosRequest(playlists)
             .then(videos => {
                 dispatch(setFetchPending(false));
                 dispatch(setFetchSuccess(true));
@@ -80,7 +114,7 @@ export function fetchVideos (playlists) {
     }
 }
 
-function sendPlaylistRequest (playlists) {
+function sendPlaylistVideosRequest (playlists) {
     return new Promise((resolve, reject) => {
         getPaginatedPlaylist(true, playlists, 0, "pageToken", []).then(videos => {
             return resolve(videos);
