@@ -1,4 +1,3 @@
-import axios from 'axios';
 import YouTube from '../API/YouTube';
 
 export const FETCH_PENDING = 'FETCH_PENDING';
@@ -37,6 +36,12 @@ export function setVideos (videos) {
 }
 
 export function addPlaylist (url) {
+
+    if (url.includes("?list="))
+    {
+        url = url.split("?list=")[1];
+    }
+
     return dispatch => {
         return new Promise((resolve, reject) => {
             dispatch({
@@ -85,38 +90,22 @@ function sendPlaylistRequest (playlists) {
     })
 }
 
-function getPaginatedPlaylist (first, playlists, i, nextPageToken, videos)
-{
-
-    // If nextPageToken is null, but we haven't gone through all playlists yet
-        // Update URL to next playlist
-        // Set 'first' to true
-
-    console.log(nextPageToken + ", " +  i + ", " + playlists.length);
-
-    if(!nextPageToken)
-    {
+function getPaginatedPlaylist (first, playlists, i, nextPageToken, videos) {
+    if(!nextPageToken) {
         i++;
-        if(i > playlists.length - 1)
-        {
-            return new Promise((res, rej) => res(videos));
+        if(i > playlists.length - 1) {
+            return new Promise(res => res(videos));
         } else {
             first = true;
         }
     }
 
-    // console.log(i);
-
-    let url = playlists[i];
-
     let params = {
-        playlistId: url,
+        playlistId: playlists[i],
         part: 'snippet',
         maxResults: 50,
         key: process.env.REACT_APP_API_KEY
     }
-
-    // console.log(params);
 
     return new Promise((res, rej) => {
 

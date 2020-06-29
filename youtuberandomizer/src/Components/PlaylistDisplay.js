@@ -19,8 +19,6 @@ class PlaylistDisplay extends Component {
     }
 
     render (){
-        const {playlists} = this.props;
-        const {data} = this.state;
         return (
             <div className="video-list">
                 {this.props.videos && this.ListVideos()}

@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import PlaylistDisplay from './Components/PlaylistDisplay'
 import PlaylistEntry from './Components/PlaylistEntry'
