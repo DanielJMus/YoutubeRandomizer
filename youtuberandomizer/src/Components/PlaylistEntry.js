@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { fetchVideos } from '../Actions/action';
+import { addPlaylist, fetchVideos } from '../Actions/action';
 
 class PlaylistEntry extends Component {
 
@@ -13,7 +13,9 @@ class PlaylistEntry extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.fetchVideos(this.state.url);
+        this.props.addPlaylist(this.state.url).then(() => {
+            this.props.fetchVideos(this.props.playlists);
+        });
     }
 
     render (){
@@ -27,13 +29,24 @@ class PlaylistEntry extends Component {
             </div>
         );
     }
+}
 
+// Retrieve the redux state and add it to the component properties.
+const mapStateToProps = (state) => {
+    return {
+        isFetchPending: state.isFetchPending,
+        isFetchSuccess: state.isFetchSuccess,
+        isFetchError: state.isFetchError,
+        videos: state.videos,
+        playlists: state.playlists
+    };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        addPlaylist: (url) => dispatch(addPlaylist(url)),
         fetchVideos: (url) => dispatch(fetchVideos(url))
     };
 }
 
-export default connect(null, mapDispatchToProps)(PlaylistEntry);
+export default connect(mapStateToProps, mapDispatchToProps)(PlaylistEntry);

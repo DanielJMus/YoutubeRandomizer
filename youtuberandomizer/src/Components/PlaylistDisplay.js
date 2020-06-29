@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import { fetchVideos } from '../Actions/action';
 
 class PlaylistDisplay extends Component {
 
@@ -13,7 +14,7 @@ class PlaylistDisplay extends Component {
     ListVideos (){
         return this.props.videos.map((item, i) => {
             var url = `http://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`;
-            return (<a href={url}><li key={i}>{item.snippet.title}</li></a>)
+            return (<a href={url} key={i}>{item.snippet.title}<br></br></a>)
         });
     }
 
@@ -21,9 +22,9 @@ class PlaylistDisplay extends Component {
         const {playlists} = this.props;
         const {data} = this.state;
         return (
-            <ul style={{listStyle:"none"}}>
+            <div className="video-list">
                 {this.props.videos && this.ListVideos()}
-            </ul>
+            </div>
         );
     }
 }
@@ -34,8 +35,15 @@ const mapStateToProps = (state) => {
         isFetchPending: state.isFetchPending,
         isFetchSuccess: state.isFetchSuccess,
         isFetchError: state.isFetchError,
-        videos: state.videos
+        videos: state.videos,
+        playlists: state.playlists
     };
 }
 
-export default connect(mapStateToProps)(PlaylistDisplay);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchVideos: (playlists) => dispatch(fetchVideos(playlists))
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlaylistDisplay);

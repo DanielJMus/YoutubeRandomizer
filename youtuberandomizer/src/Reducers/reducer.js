@@ -1,11 +1,14 @@
-import { FETCH_PENDING, FETCH_SUCCESS, FETCH_ERROR, SET_VIDEOS } from '../Actions/action';
+import { FETCH_PENDING, FETCH_SUCCESS, FETCH_ERROR, SET_VIDEOS, ADD_PLAYLIST, DELETE_PLAYLIST } from '../Actions/action';
 
-export default function reducer (state = {
+const InitialState = {
     isFetchPending: false,
     isFetchSuccess: false,
     isFetchError: null,
-    videos: null
-}, action) {
+    playlists: [],
+    videos: []
+};
+
+export default (state = InitialState, action) => {
     switch(action.type) {
         case FETCH_SUCCESS:
             return {
@@ -26,6 +29,17 @@ export default function reducer (state = {
             return {
                 ...state,
                 videos: action.videos
+            };
+        case ADD_PLAYLIST:
+            return {
+                ...state,
+                playlists: [...state.playlists, action.url]
+            };
+        case DELETE_PLAYLIST:
+            return {
+                playlists: [
+                    ...state.playlists.filter(url => url !== action.url)
+                ]
             };
 
         default:
