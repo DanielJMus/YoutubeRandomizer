@@ -13,7 +13,9 @@ class PlaylistEntry extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.fetchPlaylistInfo(this.state.url);
+        this.props.fetchPlaylistInfo(this.state.url).then(() => {
+            this.props.fetchVideos(this.props.playlists);
+        });
     }
 
     componentDidMount ()
@@ -25,8 +27,8 @@ class PlaylistEntry extends Component {
         return this.props.playlists.map((item, i) => {
             var url = `https://www.youtube.com/playlist?list=${item.id}`;
             return (
-                <div className="playlist-item">
-                    <a className="playlist-title" href={url} key={i}>{item.snippet.title}<br></br></a>
+                <div className="playlist-item" key={i}>
+                    <a className="playlist-title" href={url}>{item.snippet.title}<br></br></a>
                     <button className="playlist-remove">Remove</button>
                 </div>
             )

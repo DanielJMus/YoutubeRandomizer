@@ -50,26 +50,29 @@ export function fetchPlaylistInfo (playlistId) {
     }
 
     return dispatch => {
+        return new Promise((resolve, reject) => {
         dispatch(setFetchPending(true));
         dispatch(setFetchSuccess(false));
         dispatch(setFetchError(null));
 
         sendPlaylistRequest(playlistId)
             .then(playlist => {
-                console.log(playlist);
+                // console.log(playlist);
                 dispatch(setFetchPending(false));
                 dispatch(setFetchSuccess(true));
                 dispatch(addPlaylist(playlist));
+                resolve();
             })
             .catch(error => {
                 dispatch(setFetchPending(false));
                 dispatch(setFetchError(error));
             })
+        });
     }
 }
 
 export function sendPlaylistRequest (playlistId) {
-    console.log(playlistId);
+    // console.log(playlistId);
     return new Promise((resolve, reject) => {
         YouTube.get('/playlists', {
             params: {
@@ -119,6 +122,7 @@ function sendPlaylistVideosRequest (playlists) {
         getPaginatedPlaylist(true, playlists, 0, "pageToken", []).then(videos => {
             return resolve(videos);
         }).catch(error => {
+            console.log(error);
             return reject(error);
         })
     })
@@ -135,7 +139,7 @@ function getPaginatedPlaylist (first, playlists, i, nextPageToken, videos) {
     }
 
     let params = {
-        playlistId: playlists[i],
+        playlistId: playlists[i].id,
         part: 'snippet',
         maxResults: 50,
         key: process.env.REACT_APP_API_KEY
@@ -152,6 +156,7 @@ function getPaginatedPlaylist (first, playlists, i, nextPageToken, videos) {
             nextPageToken = response.data.nextPageToken;
             return res(getPaginatedPlaylist(false, playlists, i, nextPageToken, videos));
         }).catch(error => {
+            console.log(error);
             return rej(error);
         })
     });
