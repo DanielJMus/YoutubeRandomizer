@@ -38,7 +38,7 @@ export default (state = InitialState, action) => {
         case DELETE_PLAYLIST:
             return {
                 playlists: [
-                    ...state.playlists.filter(url => url !== action.url)
+                    ...state.playlists.filter(playlist => playlist.id !== action.playlistId)
                 ]
             };
 

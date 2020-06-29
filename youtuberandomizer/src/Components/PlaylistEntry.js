@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { fetchPlaylistInfo, fetchVideos } from '../Actions/action';
+import { fetchPlaylistInfo, fetchVideos, removePlaylist } from '../Actions/action';
 
 class PlaylistEntry extends Component {
 
@@ -9,18 +9,20 @@ class PlaylistEntry extends Component {
         super(props);
         this.state = { }
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.removePlaylist = this.removePlaylist.bind(this);
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.fetchPlaylistInfo(this.state.url).then(() => {
+        this.props.fetchPlaylistInfo(this.URL.value).then(() => {
             this.props.fetchVideos(this.props.playlists);
         });
     }
 
-    componentDidMount ()
-    {
-        // this.props.fetchVideos(this.props.playlists);
+    removePlaylist = (e) => {
+        this.props.removePlaylist(e.target.getAttribute('id')).then(() => {
+            this.props.fetchVideos(this.props.playlists);
+        });
     }
 
     ListPlaylists () {
@@ -28,8 +30,8 @@ class PlaylistEntry extends Component {
             var url = `https://www.youtube.com/playlist?list=${item.id}`;
             return (
                 <div className="playlist-item" key={i}>
-                    <a className="playlist-title" href={url}>{item.snippet.title}<br></br></a>
-                    <button className="playlist-remove">Remove</button>
+                    <a className="playlist-title" href={url}>{item.snippet.title}</a>
+                    <div class="playlist-remove" id={item.id} onClick={this.removePlaylist}>x</div>
                 </div>
             )
         });
@@ -40,7 +42,7 @@ class PlaylistEntry extends Component {
             <div className="container">
                 <h2>Enter a playlist URL</h2>
                 <form onSubmit={this.handleSubmit}>
-                    <input className="playlist-input" name="url" type='text' onChange={e => this.setState({url: e.target.value})}/>
+                    <input ref={(ref) => {this.URL = ref}} className="playlist-input" name="URL" type='text'/>
                     <input type="submit" value="Submit"/>
                 </form>
                 {
@@ -69,7 +71,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchPlaylistInfo: (url) => dispatch(fetchPlaylistInfo(url)),
-        fetchVideos: (url) => dispatch(fetchVideos(url))
+        fetchVideos: (url) => dispatch(fetchVideos(url)),
+        removePlaylist: (id) => dispatch(removePlaylist(id))
     };
 }
 

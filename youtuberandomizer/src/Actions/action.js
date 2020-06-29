@@ -42,6 +42,18 @@ export function addPlaylist (playlist) {
     }
 }
 
+export function removePlaylist (playlistId) {
+    return dispatch => {
+        return new Promise((resolve, reject) => {
+            dispatch({
+                type: DELETE_PLAYLIST,
+                playlistId
+            })
+            resolve();
+        })
+    }
+}
+
 export function fetchPlaylistInfo (playlistId) {
 
     if (playlistId.includes("?list="))
@@ -90,13 +102,6 @@ export function sendPlaylistRequest (playlistId) {
     })
 }
 
-export function deletePlaylist (url) {
-    return {
-        type: DELETE_PLAYLIST,
-        url
-    };
-}
-
 export function fetchVideos (playlists) {
     return dispatch => {
         dispatch(setFetchPending(true));
@@ -132,6 +137,8 @@ function getPaginatedPlaylist (first, playlists, i, nextPageToken, videos) {
     if(!nextPageToken) {
         i++;
         if(i > playlists.length - 1) {
+            // Videos have been successfully gathered, randomize the list and return it
+            videos = videos.sort(() => Math.random() - 0.5);
             return new Promise(res => res(videos));
         } else {
             first = true;
