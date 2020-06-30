@@ -25,45 +25,37 @@ class VideoEmbed extends Component {
         };
     }
 
-    GetFirstVideo(){
-        if(this.player && this.props.videos.length > 0) {
-            this.player.loadVideoById(this.props.videos[0].id);
-        }
-    }
-
     render () {
         const {videos} = this.props;
+        if(videos) console.log(videos && videos.length > 0);
         return (
             <div className="video-player">
-                { videos && this.GetFirstVideo() }
+                { videos && this.UpdateVideoPlayer() }
                 <div className="embed-responsive embed-responsive-16by9" id="player"></div>
             </div>
             
         );
     }
 
-    NextVideo()
+    SetVideoIndex (index)
     {
         const totalVideos = this.props.videos.length - 1;
-        let nextIndex = this.state.index + 1;
-        if(nextIndex > totalVideos)
+        if(index > totalVideos)
         {
-            nextIndex = 0;
+            index = 0;
         }
-        this.setState({index: nextIndex});
-        this.player.loadVideoById(this.props.videos[nextIndex].id);
+        if(index < 0)
+        {
+            index = totalVideos;
+        }
+        this.setState({index: index});
     }
 
-    PreviousVideo()
+    UpdateVideoPlayer ()
     {
-        const totalVideos = this.props.videos.length - 1;
-        let nextIndex = this.state.index - 1;
-        if(nextIndex < 0)
-        {
-            nextIndex = totalVideos;
+        if(this.player && this.props.videos.length > 0) {
+            this.player.loadVideoById(this.props.videos[this.state.index].id);
         }
-        this.setState({index: nextIndex});
-        this.player.loadVideoById(this.props.videos[nextIndex].id);
     }
 
     init() {
@@ -76,7 +68,7 @@ class VideoEmbed extends Component {
     onPlayerStateChange(event) {
         switch (event.data) {
           case window['YT'].PlayerState.ENDED:
-            this.NextVideo();
+            this.SetVideoIndex(this.state.index + 1);
             break;
         };
       };

@@ -7,7 +7,9 @@ class PlaylistEntry extends Component {
     constructor(props)
     {
         super(props);
-        this.state = { }
+        this.state = {
+            videoDrawerOpen: -1
+        }
         this.addPlaylist = this.addPlaylist.bind(this);
         this.removePlaylist = this.removePlaylist.bind(this);
     }
@@ -36,13 +38,27 @@ class PlaylistEntry extends Component {
         });
     }
 
+    toggleDrawer = (e) => {
+        e.preventDefault();
+        let index = parseInt(e.target.getAttribute('id'));
+        if(this.state.videoDrawerOpen === index)
+        {
+            index = -1;
+        }
+        this.setState({videoDrawerOpen: index})
+    }
+
     ListPlaylists () {
+        const { videoDrawerOpen } = this.state;
         return this.props.playlists.map((item, i) => {
             var url = `https://www.youtube.com/playlist?list=${item.id}`;
             return (
-                <div className="playlist-item" key={i}>
-                    <a className="playlist-title" href={url}>{item.title}</a>
-                    <div className="playlist-remove" index={i} onClick={this.removePlaylist}>x</div>
+                <div className="playlist-container" key={i}>
+                    <div className="playlist-item">
+                        <a className="playlist-title" href="#" id={i} onClick={this.toggleDrawer}>{item.title}</a>
+                        <div className="playlist-remove" index={i} onClick={this.removePlaylist}>x</div>
+                    </div>
+                    <div className={`playlist-videos ${videoDrawerOpen === i ? "open" : ""}`}></div>
                 </div>
             )
         });
