@@ -42,12 +42,13 @@ export function addPlaylist (playlist) {
     }
 }
 
-export function removePlaylist (playlistId) {
+export function removePlaylist (index) {
+    index = parseInt(index);
     return dispatch => {
         return new Promise((resolve, reject) => {
             dispatch({
                 type: DELETE_PLAYLIST,
-                playlistId
+                index
             })
             resolve();
         })
@@ -55,12 +56,6 @@ export function removePlaylist (playlistId) {
 }
 
 export function fetchPlaylistInfo (playlistId) {
-
-    if (playlistId.includes("?list="))
-    {
-        playlistId = playlistId.split("?list=")[1];
-    }
-
     return dispatch => {
         return new Promise((resolve, reject) => {
         dispatch(setFetchPending(true));
@@ -69,7 +64,6 @@ export function fetchPlaylistInfo (playlistId) {
 
         sendPlaylistRequest(playlistId)
             .then(playlist => {
-                // console.log(playlist);
                 dispatch(setFetchPending(false));
                 dispatch(setFetchSuccess(true));
                 dispatch(addPlaylist(playlist));
@@ -84,7 +78,6 @@ export function fetchPlaylistInfo (playlistId) {
 }
 
 export function sendPlaylistRequest (playlistId) {
-    // console.log(playlistId);
     return new Promise((resolve, reject) => {
         YouTube.get('/playlists', {
             params: {
@@ -93,7 +86,10 @@ export function sendPlaylistRequest (playlistId) {
                 key: process.env.REACT_APP_API_KEY
             }
         }).then(playlist => {
-            return resolve(playlist.data.items[0]);
+            if(playlist.data.items.length > 0)
+                return resolve(playlist.data.items[0]);
+            else
+                return reject("Playlist does not exist or may be private.");
         })
         .catch(error => {
             console.log(error);

@@ -7,21 +7,31 @@ class PlaylistEntry extends Component {
     constructor(props)
     {
         super(props);
-        this.state = { }
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = { error: undefined }
+        this.addPlaylist = this.addPlaylist.bind(this);
         this.removePlaylist = this.removePlaylist.bind(this);
     }
 
-    handleSubmit = (e) => {
+    addPlaylist = (e) => {
         e.preventDefault();
-        this.props.fetchPlaylistInfo(this.URL.value).then(() => {
-            this.props.fetchVideos(this.props.playlists);
+        let id = this.URL.value;
+        if (id.includes("?list=")) {
+            id = id.split("?list=")[1];
+        }
+        this.setState({error: undefined});
+        if(this.props.playlists.some(playlist => playlist.id === id)) {
+            this.setState({error: "Playlist has already been added"});
+            return;
+        }
+        this.props.fetchPlaylistInfo(id).then(() => {
+            // this.props.fetchVideos(this.props.playlists);
         });
     }
 
     removePlaylist = (e) => {
-        this.props.removePlaylist(e.target.getAttribute('id')).then(() => {
-            this.props.fetchVideos(this.props.playlists);
+        const index = e.target.getAttribute('index');
+        this.props.removePlaylist(index).then(() => {
+            // this.props.fetchVideos(this.props.playlists);
         });
     }
 
@@ -31,20 +41,29 @@ class PlaylistEntry extends Component {
             return (
                 <div className="playlist-item" key={i}>
                     <a className="playlist-title" href={url}>{item.snippet.title}</a>
-                    <div class="playlist-remove" id={item.id} onClick={this.removePlaylist}>x</div>
+                    <div className="playlist-remove" index={i} onClick={this.removePlaylist}>x</div>
                 </div>
             )
         });
     }
 
     render (){
+        console.log(this.props.playlists);
         return (
             <div className="container">
                 <h2>Enter a playlist URL</h2>
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={this.addPlaylist}>
                     <input ref={(ref) => {this.URL = ref}} className="playlist-input" name="URL" type='text'/>
-                    <input type="submit" value="Submit"/>
+                    <input type="submit" value="Add"/>
                 </form>
+                {
+                    this.props.isFetchError &&
+                    <p style={{color:"red", fontWeight:"bold"}}>{this.props.isFetchError}</p>
+                }
+                {
+                    this.state.error &&
+                    <p style={{color:"red", fontWeight:"bold"}}>{this.state.error}</p>
+                }
                 {
                     this.props.playlists.length > 0 &&
                     <div className="playlist-list">

@@ -21,12 +21,13 @@
 }
 
 .playlist-title {
-  font-size: 28px;
+  font-size: 24px;
   color:#333;
   text-decoration: none;
   float:left;
   text-align: left;
   padding-left:20px;
+  transition: color 0.1s;
 }
 
 .playlist-remove {
@@ -37,11 +38,15 @@
   height:30px;
   top:50%;
   right:0%;
-  transform: translate(0%, -50%);
+  transform: translate(0%, -48%);
   margin-right:10px;
   border-radius:20px;
   line-height:22px;
   font-size: 28px;
+}
+
+.playlist-title:hover {
+  color: rgb(11, 71, 148)
 }
 
 .playlist-remove:hover {
