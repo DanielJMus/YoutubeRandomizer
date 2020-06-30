@@ -5,6 +5,7 @@
 .playlist-list {
   width:500px;
   margin: 0 auto;
+  padding:30px;
 }
 
 .playlist-item {

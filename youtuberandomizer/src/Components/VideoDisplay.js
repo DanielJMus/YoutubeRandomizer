@@ -20,8 +20,13 @@ class VideoDisplay extends Component {
 
     render (){
         return (
-            <div className="video-list">
-                {this.props.videos && this.ListVideos()}
+            <div className="video-container">
+                {this.props.videos && this.props.videos.length > 0 &&
+                <div className="video-list">
+                    <h3>Current Videos:</h3>
+                    {this.ListVideos()}
+                </div>
+                }
             </div>
         );
     }

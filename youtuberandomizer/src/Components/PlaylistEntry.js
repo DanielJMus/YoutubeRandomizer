@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { fetchPlaylistInfo, fetchVideos, removePlaylist } from '../Actions/action';
+import { fetchPlaylistInfo, fetchVideos, removePlaylist, setFetchError } from '../Actions/action';
 
 class PlaylistEntry extends Component {
 
     constructor(props)
     {
         super(props);
-        this.state = { error: undefined }
+        this.state = { }
         this.addPlaylist = this.addPlaylist.bind(this);
         this.removePlaylist = this.removePlaylist.bind(this);
     }
@@ -18,20 +18,21 @@ class PlaylistEntry extends Component {
         if (id.includes("?list=")) {
             id = id.split("?list=")[1];
         }
-        this.setState({error: undefined});
         if(this.props.playlists.some(playlist => playlist.id === id)) {
-            this.setState({error: "Playlist has already been added"});
+            this.props.setFetchError("Playlist has already been added");
             return;
         }
         this.props.fetchPlaylistInfo(id).then(() => {
-            // this.props.fetchVideos(this.props.playlists);
+            this.props.fetchVideos(this.props.playlists);
         });
     }
 
     removePlaylist = (e) => {
         const index = e.target.getAttribute('index');
         this.props.removePlaylist(index).then(() => {
-            // this.props.fetchVideos(this.props.playlists);
+            if(this.props.playlists.length > 0) {
+                this.props.fetchVideos(this.props.playlists);
+            }
         });
     }
 
@@ -48,7 +49,6 @@ class PlaylistEntry extends Component {
     }
 
     render (){
-        console.log(this.props.playlists);
         return (
             <div className="container">
                 <h2>Enter a playlist URL</h2>
@@ -56,14 +56,8 @@ class PlaylistEntry extends Component {
                     <input ref={(ref) => {this.URL = ref}} className="playlist-input" name="URL" type='text'/>
                     <input type="submit" value="Add"/>
                 </form>
-                {
-                    this.props.isFetchError &&
-                    <p style={{color:"red", fontWeight:"bold"}}>{this.props.isFetchError}</p>
-                }
-                {
-                    this.state.error &&
-                    <p style={{color:"red", fontWeight:"bold"}}>{this.state.error}</p>
-                }
+                <p style={{color:"red", fontWeight:"bold"}}>{this.props.isFetchError}</p>
+                <p style={{color:"red", fontWeight:"bold"}}>{this.state.error}</p>
                 {
                     this.props.playlists.length > 0 &&
                     <div className="playlist-list">
@@ -91,7 +85,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchPlaylistInfo: (url) => dispatch(fetchPlaylistInfo(url)),
         fetchVideos: (url) => dispatch(fetchVideos(url)),
-        removePlaylist: (id) => dispatch(removePlaylist(id))
+        removePlaylist: (id) => dispatch(removePlaylist(id)),
+        setFetchError: (error) => dispatch(setFetchError(error))
     };
 }
 
