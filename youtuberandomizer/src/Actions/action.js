@@ -85,10 +85,15 @@ export function sendPlaylistRequest (playlistId) {
                 part: 'snippet',
                 key: process.env.REACT_APP_API_KEY
             }
-        }).then(playlist => {
-            if(playlist.data.items.length > 0)
-                return resolve(playlist.data.items[0]);
-            else
+        }).then(playlists => {
+            if(playlists.data.items.length > 0) {
+                // Prune variables
+                const playlist = {
+                    id: playlists.data.items[0].id,
+                    title: playlists.data.items[0].snippet.title,
+                }
+                return resolve(playlist);
+            }else
                 return reject("Playlist does not exist or may be private.");
         })
         .catch(error => {
@@ -155,7 +160,12 @@ function getPaginatedPlaylist (first, playlists, i, nextPageToken, videos) {
         YouTube.get('/playlistItems', {
             params: params
         }).then(response => {
-            videos = videos.concat(response.data.items);
+            const videolist = response.data.items.map(item => ({
+                id: item.snippet.resourceId.videoId,
+                title: item.snippet.title,
+                enabled: true
+            }));
+            videos = videos.concat(videolist);
             nextPageToken = response.data.nextPageToken;
             return res(getPaginatedPlaylist(false, playlists, i, nextPageToken, videos));
         }).catch(error => {

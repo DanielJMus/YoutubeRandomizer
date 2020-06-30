@@ -41,7 +41,7 @@ class PlaylistEntry extends Component {
             var url = `https://www.youtube.com/playlist?list=${item.id}`;
             return (
                 <div className="playlist-item" key={i}>
-                    <a className="playlist-title" href={url}>{item.snippet.title}</a>
+                    <a className="playlist-title" href={url}>{item.title}</a>
                     <div className="playlist-remove" index={i} onClick={this.removePlaylist}>x</div>
                 </div>
             )

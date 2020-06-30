@@ -13,8 +13,8 @@ class VideoDisplay extends Component {
 
     ListVideos (){
         return this.props.videos.map((item, i) => {
-            var url = `http://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`;
-            return (<a href={url} key={i}>{item.snippet.title}<br></br></a>)
+            var url = `http://www.youtube.com/watch?v=${item.id}`;
+            return (<a href={url} key={i}>{item.title}<br></br></a>)
         });
     }
 

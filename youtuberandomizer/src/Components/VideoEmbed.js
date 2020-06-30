@@ -27,7 +27,7 @@ class VideoEmbed extends Component {
 
     GetFirstVideo(){
         if(this.player && this.props.videos.length > 0) {
-            this.player.loadVideoById(this.props.videos[0].snippet.resourceId.videoId);
+            this.player.loadVideoById(this.props.videos[0].id);
         }
     }
 
@@ -45,25 +45,25 @@ class VideoEmbed extends Component {
     NextVideo()
     {
         const totalVideos = this.props.videos.length - 1;
-        const nextIndex = this.state.index + 1;
+        let nextIndex = this.state.index + 1;
         if(nextIndex > totalVideos)
         {
             nextIndex = 0;
         }
         this.setState({index: nextIndex});
-        this.player.loadVideoById(this.props.videos[nextIndex].snippet.resourceId.videoId);
+        this.player.loadVideoById(this.props.videos[nextIndex].id);
     }
 
     PreviousVideo()
     {
         const totalVideos = this.props.videos.length - 1;
-        const nextIndex = this.state.index - 1;
+        let nextIndex = this.state.index - 1;
         if(nextIndex < 0)
         {
             nextIndex = totalVideos;
         }
         this.setState({index: nextIndex});
-        this.player.loadVideoById(this.props.videos[nextIndex].snippet.resourceId.videoId);
+        this.player.loadVideoById(this.props.videos[nextIndex].id);
     }
 
     init() {
