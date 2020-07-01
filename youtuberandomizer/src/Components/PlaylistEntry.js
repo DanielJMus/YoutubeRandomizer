@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { fetchPlaylistInfo, fetchVideos, removePlaylist, setFetchError } from '../Actions/action';
+import { fetchPlaylistInfo, fetchVideos, removePlaylist, setFetchError, setVideo } from '../Actions/action';
 
 class PlaylistEntry extends Component {
 
@@ -8,7 +8,8 @@ class PlaylistEntry extends Component {
     {
         super(props);
         this.state = {
-            videoDrawerOpen: -1
+            videoDrawerOpen: -1,
+            videoDrawerId: ""
         }
         this.addPlaylist = this.addPlaylist.bind(this);
         this.removePlaylist = this.removePlaylist.bind(this);
@@ -41,11 +42,33 @@ class PlaylistEntry extends Component {
     toggleDrawer = (e) => {
         e.preventDefault();
         let index = parseInt(e.target.getAttribute('id'));
+        let playlistId = e.target.getAttribute('playlist');
         if(this.state.videoDrawerOpen === index)
         {
+            playlistId = "";
             index = -1;
         }
-        this.setState({videoDrawerOpen: index})
+        this.setState({videoDrawerOpen: index, videoDrawerId: playlistId})
+    }
+
+    updateVideo = (e) => {
+        const videoId = e.target.getAttribute('id');
+        const enabled = e.target.checked;
+        this.props.setVideo(videoId, enabled);
+        // console.log(videoId);
+    }
+
+    ListVideos (){
+        if(this.props.videos.length === 0) return;
+        console.log(this.state.videoDrawerId + ", " + this.props.videos[0].playlistId);
+        return this.props.videos.filter(x => x.playlistId === this.state.videoDrawerId).map((item, i) => {
+            return (
+                <div className="video-item">
+                    <input type="checkbox" defaultChecked={item.enabled} id={item.id} key={i} name="title" value={item.title} onChange={this.updateVideo} />
+                    <label>{item.title}</label>
+                </div>
+                )
+        });
     }
 
     ListPlaylists () {
@@ -54,11 +77,13 @@ class PlaylistEntry extends Component {
             var url = `https://www.youtube.com/playlist?list=${item.id}`;
             return (
                 <div className="playlist-container" key={i}>
-                    <div className="playlist-item">
-                        <a className="playlist-title" href="#" id={i} onClick={this.toggleDrawer}>{item.title}</a>
+                    <div className={`playlist-item ${videoDrawerOpen === i ? "selected" : ""}`}>
+                        <a className="playlist-title" href="#" playlist={item.id} id={i} onClick={this.toggleDrawer}>{item.title}</a>
                         <div className="playlist-remove" index={i} onClick={this.removePlaylist}>x</div>
                     </div>
-                    <div className={`playlist-videos ${videoDrawerOpen === i ? "open" : ""}`}></div>
+                    <div className={`playlist-videos ${videoDrawerOpen === i ? "open" : ""}`}>
+                        {this.props.videos && this.ListVideos()}
+                    </div>
                 </div>
             )
         });
@@ -102,7 +127,8 @@ const mapDispatchToProps = (dispatch) => {
         fetchPlaylistInfo: (url) => dispatch(fetchPlaylistInfo(url)),
         fetchVideos: (url) => dispatch(fetchVideos(url)),
         removePlaylist: (id) => dispatch(removePlaylist(id)),
-        setFetchError: (error) => dispatch(setFetchError(error))
+        setFetchError: (error) => dispatch(setFetchError(error)),
+        setVideo: (id, enabled) => dispatch(setVideo(id, enabled))
     };
 }
 

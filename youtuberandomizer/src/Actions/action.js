@@ -6,6 +6,7 @@ export const FETCH_ERROR = 'FETCH_ERROR';
 export const SET_VIDEOS = 'SET_VIDEOS';
 export const ADD_PLAYLIST = 'ADD_PLAYLIST';
 export const DELETE_PLAYLIST = 'DELETE_PLAYLIST';
+export const SET_VIDEO = 'SET_VIDEO';
 
 export function setFetchPending (isFetchPending) {
     return {
@@ -32,6 +33,16 @@ export function setVideos (videos) {
     return {
         type: SET_VIDEOS,
         videos
+    };
+}
+
+export function setVideo (id, enabled) {
+    return {
+        type: SET_VIDEO,
+        video: {
+            id: id,
+            enabled: enabled
+        }
     };
 }
 
@@ -163,6 +174,7 @@ function getPaginatedPlaylist (first, playlists, i, nextPageToken, videos) {
             const videolist = response.data.items.map(item => ({
                 id: item.snippet.resourceId.videoId,
                 title: item.snippet.title,
+                playlistId: item.snippet.playlistId,
                 enabled: true
             }));
             videos = videos.concat(videolist);

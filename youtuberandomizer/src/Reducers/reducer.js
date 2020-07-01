@@ -1,4 +1,4 @@
-import { FETCH_PENDING, FETCH_SUCCESS, FETCH_ERROR, SET_VIDEOS, ADD_PLAYLIST, DELETE_PLAYLIST } from '../Actions/action';
+import { FETCH_PENDING, FETCH_SUCCESS, FETCH_ERROR, SET_VIDEOS, ADD_PLAYLIST, DELETE_PLAYLIST, SET_VIDEO } from '../Actions/action';
 
 const InitialState = {
     isFetchPending: false,
@@ -40,6 +40,14 @@ export default (state = InitialState, action) => {
                 playlists: [
                     ...state.playlists.filter((item, index) => index !== action.index)
                 ]
+            };
+        case SET_VIDEO:
+            return {
+                ...state,
+                videos: state.videos.map(video => video.id === action.video.id ?
+                    { ...video, enabled: action.video.enabled } :
+                    video 
+                )
             };
 
         default:

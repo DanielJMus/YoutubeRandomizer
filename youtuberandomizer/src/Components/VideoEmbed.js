@@ -91,7 +91,7 @@ const mapStateToProps = (state) => {
         isFetchPending: state.isFetchPending,
         isFetchSuccess: state.isFetchSuccess,
         isFetchError: state.isFetchError,
-        videos: state.videos,
+        videos: (state.videos) ? state.videos.filter(x => x.enabled) : state.videos,
         playlists: state.playlists
     };
 }
