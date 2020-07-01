@@ -25,11 +25,30 @@ class VideoEmbed extends Component {
         };
     }
 
+    // CONTROLS
+    Next = () => {
+        this.SetVideoIndex(this.state.index + 1);
+    }
+
+    Previous = () => {
+        this.SetVideoIndex(this.state.index - 1);
+    }
+
+    Shuffle = () => {
+        // this.SetVideoIndex(this.state.index - 1);
+    }
+
     render () {
         const {videos} = this.props;
         return (
             <div className="video-player">
                 { videos && this.UpdateVideoPlayer() }
+                <div className="video-controls">
+                    <input onClick={this.Previous} className="video-control left" type="button" value="< Previous"/>
+                    <input onClick={this.Shuffle} className="video-control" type="button" value="Reshuffle"/>
+                    <input onClick={this.Next} className="video-control right" type="button" value="Next >"/>
+                </div>
+                
                 <div className="embed-responsive embed-responsive-16by9" id="player"></div>
             </div>
             
@@ -41,6 +60,7 @@ class VideoEmbed extends Component {
         const totalVideos = this.props.videos.length - 1;
         if(index > totalVideos)
         {
+            // Reshuffle
             index = 0;
         }
         if(index < 0)
@@ -75,16 +95,7 @@ class VideoEmbed extends Component {
     };
 
     onPlayerError(event) {
-        switch (event.data) {
-            case 2:
-            break;
-            case 100:
-            break;
-            case 101 || 150:
-            break;
-            default:
-            break;
-        };
+        this.SetVideoIndex(this.state.index + 1);
     }
 }
 

@@ -20,6 +20,11 @@
   justify-content: center;
   align-content: center;
   flex-direction: column;
+  transition:background-color 0.1s;
+}
+
+.playlist-item:hover {
+  background-color:#EEE;
 }
 
 .playlist-videos {
@@ -38,7 +43,12 @@
   height:300px;
 }
 
-.selected {
+.playlist-item.selected {
+  background-color: rgb(0, 117, 255);
+  color:white;
+}
+
+.playlist-item.selected:hover {
   background-color: rgb(0, 117, 255);
   color:white;
 }
@@ -72,6 +82,49 @@
 
 .playlist-remove:hover {
   background-color:#DDD;
+}
+
+.embed-responsive {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 1px 1px 3px #888;
+}
+
+.video-controls {
+  width:640px;
+  height:40px;
+  margin: 0 auto;
+}
+
+.video-control {
+  height:100%;
+  width:33.3%;
+  border:0;
+  cursor: pointer;
+  background-color:#FFF;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  box-shadow: 1px 1px 3px #888;
+}
+
+.video-control:hover {
+  background-color:#DDD;
+}
+
+.video-control:focus {
+  outline:0;
+}
+
+.video-control:active{
+  background-color:#CCC;
+}
+
+.video-control.left {
+  border-top-left-radius: 10px;
+}
+
+.video-control.right {
+  border-top-right-radius: 10px;
 }
 
 /* width */
