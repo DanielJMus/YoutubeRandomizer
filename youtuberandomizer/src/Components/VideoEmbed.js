@@ -27,7 +27,6 @@ class VideoEmbed extends Component {
 
     render () {
         const {videos} = this.props;
-        if(videos) console.log(videos && videos.length > 0);
         return (
             <div className="video-player">
                 { videos && this.UpdateVideoPlayer() }
@@ -67,11 +66,13 @@ class VideoEmbed extends Component {
 
     onPlayerStateChange(event) {
         switch (event.data) {
-          case window['YT'].PlayerState.ENDED:
-            this.SetVideoIndex(this.state.index + 1);
+            case window['YT'].PlayerState.ENDED:
+                this.SetVideoIndex(this.state.index + 1);
             break;
+            default:
+                break;
         };
-      };
+    };
 
     onPlayerError(event) {
         switch (event.data) {
@@ -81,6 +82,8 @@ class VideoEmbed extends Component {
             break;
             case 101 || 150:
             break;
+            default:
+            break;
         };
     }
 }
@@ -88,9 +91,6 @@ class VideoEmbed extends Component {
 // Retrieve the redux state and add it to the component properties.
 const mapStateToProps = (state) => {
     return {
-        isFetchPending: state.isFetchPending,
-        isFetchSuccess: state.isFetchSuccess,
-        isFetchError: state.isFetchError,
         videos: (state.videos) ? state.videos.filter(x => x.enabled) : state.videos,
         playlists: state.playlists
     };

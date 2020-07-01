@@ -41,8 +41,8 @@ class PlaylistEntry extends Component {
 
     toggleDrawer = (e) => {
         e.preventDefault();
-        let index = parseInt(e.target.getAttribute('id'));
-        let playlistId = e.target.getAttribute('playlist');
+        let index = parseInt(e.currentTarget.getAttribute('id'));
+        let playlistId = e.currentTarget.getAttribute('playlist');
         if(this.state.videoDrawerOpen === index)
         {
             playlistId = "";
@@ -55,7 +55,6 @@ class PlaylistEntry extends Component {
         const videoId = e.target.getAttribute('id');
         const enabled = e.target.checked;
         this.props.setVideo(videoId, enabled);
-        // console.log(videoId);
     }
 
     ListVideos (){
@@ -74,11 +73,11 @@ class PlaylistEntry extends Component {
     ListPlaylists () {
         const { videoDrawerOpen } = this.state;
         return this.props.playlists.map((item, i) => {
-            var url = `https://www.youtube.com/playlist?list=${item.id}`;
+            // var url = `https://www.youtube.com/playlist?list=${item.id}`;
             return (
                 <div className="playlist-container" key={i}>
-                    <div className={`playlist-item ${videoDrawerOpen === i ? "selected" : ""}`}>
-                        <a className="playlist-title" href="#" playlist={item.id} id={i} onClick={this.toggleDrawer}>{item.title}</a>
+                    <div className={`playlist-item ${videoDrawerOpen === i ? "selected" : ""}`} id={i} playlist={item.id} onClick={this.toggleDrawer}>
+                        <h2 className="playlist-title">{item.title}</h2>
                         <div className="playlist-remove" index={i} onClick={this.removePlaylist}>x</div>
                     </div>
                     <div className={`playlist-videos ${videoDrawerOpen === i ? "open" : ""}`}>
