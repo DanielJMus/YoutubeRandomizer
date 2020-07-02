@@ -90,10 +90,10 @@ class PlaylistEntry extends Component {
     render (){
         return (
             <div className="container">
-                <h2>Enter a playlist URL</h2>
-                <form onSubmit={this.addPlaylist}>
+                <h2>Enter a playlist URL or ID</h2>
+                <form className="playlist-form" onSubmit={this.addPlaylist}>
                     <input ref={(ref) => {this.URL = ref}} className="playlist-input" name="URL" type='text'/>
-                    <input type="submit" value="Add"/>
+                    <input className="playlist-add" type="submit" value="Add"/>
                 </form>
                 <p style={{color:"red", fontWeight:"bold"}}>{this.props.isFetchError}</p>
                 <p style={{color:"red", fontWeight:"bold"}}>{this.state.error}</p>
