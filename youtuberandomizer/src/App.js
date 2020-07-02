@@ -7,7 +7,7 @@ import VideoEmbed from './Components/VideoEmbed';
 function App() {
   return (
     <div className="App">
-      <h1>A Better Youtube Shuffler</h1>
+      <h1 className="title">A Better Youtube Shuffler</h1>
       <br></br>
       <PlaylistEntry/>
       <VideoEmbed/>

@@ -17,7 +17,7 @@ class PlaylistEntry extends Component {
 
     componentDidMount ()
     {
-        // Get URL parameters and load each
+        // Get playlists from URL parameters and load each (if available)d
         let url = window.location.search.split("?list=")[1];
         if(!url) return;
         if(url.includes("&")) {
