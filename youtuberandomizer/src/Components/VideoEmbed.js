@@ -5,22 +5,16 @@ import {setVideos} from '../Actions/action';
 class VideoEmbed extends Component {
     constructor (props) {
         super(props);
-
         this.state = { index: 0 };
-
         this.init();
-
         window['onYouTubeIframeAPIReady'] = (e) => {
             this.YT = window['YT'];
-            this.reframed = false;
             this.player = new window['YT'].Player('player', {
-                videoId: this.video,
+                videoId: "5mGuCdlCcNM",
                 events: {
                     'onStateChange': this.onPlayerStateChange.bind(this),
                     'onError': this.onPlayerError.bind(this),
-                    'onReady': (e) => {
-                        e.target.playVideo();
-                    }
+                    'onReady': (e) => e.target.playVideo()
                 }
             });
         };
@@ -39,43 +33,16 @@ class VideoEmbed extends Component {
         this.props.setVideos(this.props.videos.sort(() => Math.random() - 0.5));
     }
 
-    render () {
-        const {videos} = this.props;
-        return (
-            <div className="video-player">
-                { videos && this.UpdateVideoPlayer() }
-                <div className="video-controls">
-                    <input onClick={this.Previous} className="video-control left" type="button" value="< Previous"/>
-                    <input onClick={this.Shuffle} className="video-control" type="button" value="Reshuffle"/>
-                    <input onClick={this.Next} className="video-control right" type="button" value="Next >"/>
-                </div>
-                
-                <div className="embed-responsive embed-responsive-16by9" id="player"></div>
-            </div>
-            
-        );
-    }
-
-    SetVideoIndex (index)
-    {
+    SetVideoIndex (index) {
         const totalVideos = this.props.videos.length - 1;
-        if(index > totalVideos)
-        {
-            // Reshuffle
+        if(index > totalVideos) {
+            this.Shuffle();
             index = 0;
         }
-        if(index < 0)
-        {
+        if(index < 0) {
             index = totalVideos;
         }
         this.setState({index: index});
-    }
-
-    UpdateVideoPlayer ()
-    {
-        if(this.player && this.props.videos.length > 0) {
-            this.player.loadVideoById(this.props.videos[this.state.index].id);
-        }
     }
 
     init() {
@@ -85,7 +52,17 @@ class VideoEmbed extends Component {
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     }
 
-    onPlayerStateChange(event) {
+    UpdatePlayer () {
+        if(this.player && this.props.videos.length > 0) {
+            if(!this.props.videos[this.state.index].enabled)
+            {
+                this.Next();
+            }
+            this.player.loadVideoById(this.props.videos[this.state.index].id);
+        }
+    }
+
+    onPlayerStateChange (event) {
         switch (event.data) {
             case window['YT'].PlayerState.ENDED:
                 this.SetVideoIndex(this.state.index + 1);
@@ -95,8 +72,24 @@ class VideoEmbed extends Component {
         };
     };
 
-    onPlayerError(event) {
+    onPlayerError (event) {
         this.SetVideoIndex(this.state.index + 1);
+    }
+
+    render () {
+        const {videos} = this.props;
+        return (
+            <div className="video-player">
+                { videos && this.UpdatePlayer() }
+                <div className="video-controls">
+                    <input onClick={this.Previous} className="video-control left" type="button" value="< Previous"/>
+                    <input onClick={this.Shuffle} className="video-control" type="button" value="Reshuffle"/>
+                    <input onClick={this.Next} className="video-control right" type="button" value="Next >"/>
+                </div>
+                
+                <div className="embed-responsive embed-responsive-16by9" id="player"></div>
+            </div>
+        );
     }
 }
 
@@ -109,7 +102,7 @@ const mapDispatchToProps = (dispatch) => {
 // Retrieve the redux state and add it to the component properties.
 const mapStateToProps = (state) => {
     return {
-        videos: (state.videos) ? state.videos.filter(x => x.enabled) : state.videos,
+        videos: state.videos,
         playlists: state.playlists
     };
 }

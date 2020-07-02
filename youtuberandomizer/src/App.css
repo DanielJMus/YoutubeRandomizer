@@ -127,6 +127,10 @@
   border-top-right-radius: 10px;
 }
 
+.video-list {
+  margin-bottom:20px;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
