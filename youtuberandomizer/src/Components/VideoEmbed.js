@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {setVideos} from '../Actions/action';
 
 class VideoEmbed extends Component {
     constructor (props) {
@@ -35,7 +36,7 @@ class VideoEmbed extends Component {
     }
 
     Shuffle = () => {
-        // this.SetVideoIndex(this.state.index - 1);
+        this.props.setVideos(this.props.videos.sort(() => Math.random() - 0.5));
     }
 
     render () {
@@ -99,6 +100,12 @@ class VideoEmbed extends Component {
     }
 }
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setVideos: (videos) => dispatch(setVideos(videos))
+    };
+}
+
 // Retrieve the redux state and add it to the component properties.
 const mapStateToProps = (state) => {
     return {
@@ -107,4 +114,4 @@ const mapStateToProps = (state) => {
     };
 }
 
-export default connect(mapStateToProps)(VideoEmbed);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoEmbed);

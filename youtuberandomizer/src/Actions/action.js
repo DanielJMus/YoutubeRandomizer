@@ -145,7 +145,7 @@ function sendPlaylistVideosRequest (playlists) {
     })
 }
 
-function getPaginatedPlaylist (first, playlists, i, nextPageToken, videos) {
+function getPaginatedPlaylist (firstPage, playlists, i, nextPageToken, videos) {
     if(!nextPageToken) {
         i++;
         if(i > playlists.length - 1) {
@@ -153,7 +153,7 @@ function getPaginatedPlaylist (first, playlists, i, nextPageToken, videos) {
             videos = videos.sort(() => Math.random() - 0.5);
             return new Promise(res => res(videos));
         } else {
-            first = true;
+            firstPage = true;
         }
     }
 
@@ -166,7 +166,7 @@ function getPaginatedPlaylist (first, playlists, i, nextPageToken, videos) {
 
     return new Promise((res, rej) => {
 
-        if(!first) params.pageToken = nextPageToken;
+        if(!firstPage) params.pageToken = nextPageToken;
 
         YouTube.get('/playlistItems', {
             params: params

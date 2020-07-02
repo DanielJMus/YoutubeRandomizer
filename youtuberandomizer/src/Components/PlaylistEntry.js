@@ -59,7 +59,6 @@ class PlaylistEntry extends Component {
 
     ListVideos (){
         if(this.props.videos.length === 0) return;
-        console.log(this.state.videoDrawerId + ", " + this.props.videos[0].playlistId);
         return this.props.videos.filter(x => x.playlistId === this.state.videoDrawerId).map((item, i) => {
             return (
                 <div className="video-item">
