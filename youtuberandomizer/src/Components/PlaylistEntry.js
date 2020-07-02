@@ -11,11 +11,27 @@ class PlaylistEntry extends Component {
             videoDrawerOpen: -1,
             videoDrawerId: ""
         }
-        this.addPlaylist = this.addPlaylist.bind(this);
+        this.submitPlaylist = this.submitPlaylist.bind(this);
         this.removePlaylist = this.removePlaylist.bind(this);
     }
 
-    addPlaylist = (e) => {
+    componentDidMount ()
+    {
+        // Get URL parameters and load each
+        let url = window.location.search.split("?list=")[1];
+        if(!url) return;
+        if(url.includes("&")) {
+            let lists = url.split("&");
+            for(var i = 0; i < lists.length; i++) {
+                this.addPlaylist(lists[i]);
+            }
+        } else {
+            // Only one playlist to add
+            this.addPlaylist(url);
+        }
+    }
+
+    submitPlaylist = (e) => {
         e.preventDefault();
         let id = this.URL.value;
         if (id.includes("?list=")) {
@@ -25,15 +41,19 @@ class PlaylistEntry extends Component {
             this.props.setFetchError("Playlist has already been added");
             return;
         }
+        this.addPlaylist(id);
+    }
+
+    addPlaylist (id) {
         this.props.fetchPlaylistInfo(id).then(() => {
             this.refreshURLParams();
-            // document.location.search = "?list=" + this.props.playlists.map(x => x.id).join("&");
             this.props.fetchVideos(this.props.playlists);
         });
     }
 
     refreshURLParams()
     {
+        window.history.replaceState( {} , {}, "/");
         let url = "?list=" + this.props.playlists.map(x => x.id).join("&");
         if(this.props.playlists.length == 0) {
             url = "/";
@@ -113,7 +133,7 @@ class PlaylistEntry extends Component {
         return (
             <div className="container">
                 <h2>Enter a playlist URL or ID</h2>
-                <form className="playlist-form" onSubmit={this.addPlaylist}>
+                <form className="playlist-form" onSubmit={this.submitPlaylist}>
                     <input ref={(ref) => {this.URL = ref}} className="playlist-input" name="URL" type='text'/>
                     <input className="playlist-add" type="submit" value="Add"/>
                 </form>

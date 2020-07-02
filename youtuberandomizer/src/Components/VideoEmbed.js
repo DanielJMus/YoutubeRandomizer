@@ -5,7 +5,7 @@ import {setVideos} from '../Actions/action';
 class VideoEmbed extends Component {
     constructor (props) {
         super(props);
-        this.state = { index: 0 };
+        this.state = { index: 0, isPlayerReady: false };
         this.init();
         window['onYouTubeIframeAPIReady'] = (e) => {
             this.YT = window['YT'];
@@ -14,10 +14,16 @@ class VideoEmbed extends Component {
                 events: {
                     'onStateChange': this.onPlayerStateChange.bind(this),
                     'onError': this.onPlayerError.bind(this),
-                    'onReady': (e) => e.target.playVideo()
+                    'onReady': this.onPlayerReady
                 }
             });
         };
+    }
+
+    onPlayerReady = (e) => {
+        e.target.playVideo()
+        this.setState({isPlayerReady: true});
+        this.UpdatePlayer();
     }
 
     // CONTROLS
@@ -53,12 +59,14 @@ class VideoEmbed extends Component {
     }
 
     UpdatePlayer () {
-        if(this.player && this.props.videos.length > 0) {
+        if(!this.state.isPlayerReady) return;
+        if(this.player && this.props.videos && this.props.videos.length > 0) {
             if(!this.props.videos[this.state.index].enabled)
             {
                 console.log("No");
                 this.Next();
             }
+            console.log(this.player);
             this.player.loadVideoById(this.props.videos[this.state.index].id);
         }
     }
