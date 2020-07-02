@@ -26,13 +26,25 @@ class PlaylistEntry extends Component {
             return;
         }
         this.props.fetchPlaylistInfo(id).then(() => {
+            this.refreshURLParams();
+            // document.location.search = "?list=" + this.props.playlists.map(x => x.id).join("&");
             this.props.fetchVideos(this.props.playlists);
         });
+    }
+
+    refreshURLParams()
+    {
+        let url = "?list=" + this.props.playlists.map(x => x.id).join("&");
+        if(this.props.playlists.length == 0) {
+            url = "/";
+        }
+        window.history.replaceState( {} , {}, url);
     }
 
     removePlaylist = (e) => {
         const index = e.target.getAttribute('index');
         this.props.removePlaylist(index).then(() => {
+            this.refreshURLParams();
             if(this.props.playlists.length > 0) {
                 this.props.fetchVideos(this.props.playlists);
             }
