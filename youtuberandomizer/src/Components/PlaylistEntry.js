@@ -57,12 +57,22 @@ class PlaylistEntry extends Component {
         this.props.setVideo(videoId, enabled);
     }
 
+    compare(a, b) {
+        const titleA = a.title.toUpperCase();
+        const titleB = b.title.toUpperCase();
+
+        if (titleA > titleB)
+          return 1;
+        else
+          return -1;
+      }
+
     ListVideos (){
         if(this.props.videos.length === 0) return;
-        return this.props.videos.filter(x => x.playlistId === this.state.videoDrawerId).map((item, i) => {
+        return this.props.videos.filter(x => x.playlistId === this.state.videoDrawerId).sort(this.compare).map((item, i) => {
             return (
-                <div className="video-item">
-                    <input type="checkbox" defaultChecked={item.enabled} id={item.id} key={i} name="title" value={item.title} onChange={this.updateVideo} />
+                <div className="video-item" key={i}>
+                    <input type="checkbox" checked={item.enabled} id={item.id} name="title" value={item.title} onChange={this.updateVideo} />
                     <label>{item.title}</label>
                 </div>
                 )
@@ -76,7 +86,7 @@ class PlaylistEntry extends Component {
             return (
                 <div className="playlist-container" key={i}>
                     <div className={`playlist-item ${videoDrawerOpen === i ? "selected" : ""}`} id={i} playlist={item.id} onClick={this.toggleDrawer}>
-                        <h2 className="playlist-title">{item.title}</h2>
+                        <h2 className="playlist-title"><span className={`dropdown-arrow ${videoDrawerOpen === i ? "selected" : ""}`}></span>{item.title}</h2>
                         <div className="playlist-remove" index={i} onClick={this.removePlaylist}>x</div>
                     </div>
                     <div className={`playlist-videos ${videoDrawerOpen === i ? "open" : ""}`}>

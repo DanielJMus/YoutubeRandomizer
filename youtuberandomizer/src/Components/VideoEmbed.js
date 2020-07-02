@@ -56,6 +56,7 @@ class VideoEmbed extends Component {
         if(this.player && this.props.videos.length > 0) {
             if(!this.props.videos[this.state.index].enabled)
             {
+                console.log("No");
                 this.Next();
             }
             this.player.loadVideoById(this.props.videos[this.state.index].id);
@@ -82,9 +83,9 @@ class VideoEmbed extends Component {
             <div className="video-player">
                 { videos && this.UpdatePlayer() }
                 <div className="video-controls">
-                    <input onClick={this.Previous} className="video-control left" type="button" value="< Previous"/>
+                    <input onClick={this.Previous} className="video-control" type="button" value="< Previous"/>
                     <input onClick={this.Shuffle} className="video-control" type="button" value="Reshuffle"/>
-                    <input onClick={this.Next} className="video-control right" type="button" value="Next >"/>
+                    <input onClick={this.Next} className="video-control" type="button" value="Next >"/>
                 </div>
                 
                 <div className="embed-responsive embed-responsive-16by9" id="player"></div>
