@@ -13,7 +13,7 @@ The app comes with the added benefit of allowing for multiple playlists to be ad
 - [x] Next/Previous/Reshuffle Buttons
 - [x] Allow disabling of specific videos in playlists
 - [x] Error check to skip unavailable videos
-- [ ] Implement url parameters to allow bookmarking
+- [x] Implement url parameters to allow bookmarking
 - [ ] User auth for private playlists
 - [ ] Minimal UI Mode
 
