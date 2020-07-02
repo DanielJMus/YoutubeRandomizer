@@ -15,6 +15,7 @@ The app comes with the added benefit of allowing for multiple playlists to be ad
 - [x] Error check to skip unavailable videos
 - [ ] Implement url parameters to allow bookmarking
 - [ ] User auth for private playlists
+- [ ] Minimal UI Mode
 
 ### `npm start`
 
