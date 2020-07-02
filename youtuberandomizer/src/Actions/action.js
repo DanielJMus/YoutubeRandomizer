@@ -175,7 +175,7 @@ function getPaginatedPlaylist (firstPage, playlists, i, nextPageToken, videos) {
                 id: item.snippet.resourceId.videoId,
                 title: item.snippet.title,
                 playlistId: item.snippet.playlistId,
-                enabled: true
+                enabled: (item.snippet.title === "Private video") ? false : true
             }));
             videos = videos.concat(videolist);
             nextPageToken = response.data.nextPageToken;

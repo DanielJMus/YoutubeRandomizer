@@ -10,10 +10,11 @@ The app comes with the added benefit of allowing for multiple playlists to be ad
 
 - [x] Playlist Adding, Retrieving, and Shuffling
 - [x] Implement YouTube embed with end-state detection
+- [x] Next/Previous/Reshuffle Buttons
+- [x] Allow disabling of specific videos in playlists
+- [x] Error check to skip unavailable videos
 - [ ] Implement url parameters to allow bookmarking
-- [ ] Next/Previous/Reshuffle Buttons
-- [ ] Allow disabling of specific videos in playlists
-- [ ] Error check to skip unavailable videos
+- [ ] User auth for private playlists
 
 ### `npm start`
 
