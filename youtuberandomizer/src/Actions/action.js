@@ -30,13 +30,6 @@ export function setFetchError (isFetchError) {
     };
 }
 
-export function setFinishedLoading (isFinishedLoading) {
-    return {
-        type: SET_FINISHEDLOADING,
-        isFinishedLoading
-    };
-}
-
 export function setVideos (videos) {
     return {
         type: SET_VIDEOS,
@@ -87,18 +80,15 @@ export function fetchPlaylistsInfo (playlists) {
             .then(playlist => {
                 dispatch(addPlaylist(playlist));
                 index++;
-                // console.log(i + ", " + (playlists.length - 1));
                 if(index > playlists.length - 1) {
                     dispatch(setFetchPending(false));
                     dispatch(setFetchSuccess(true));
-                    dispatch(setFinishedLoading(true));
                     resolve();
                 }
             })
             .catch(error => {
                 dispatch(setFetchPending(false));
                 dispatch(setFetchError(error));
-                dispatch(setFinishedLoading(true));
                 reject();
             })
         }
@@ -119,13 +109,11 @@ export function fetchPlaylistInfo (playlistId) {
                 dispatch(setFetchPending(false));
                 dispatch(setFetchSuccess(true));
                 dispatch(addPlaylist(playlist));
-                dispatch(setFinishedLoading(true));
                 resolve();
             })
             .catch(error => {
                 dispatch(setFetchPending(false));
                 dispatch(setFetchError(error));
-                dispatch(setFinishedLoading(true));
             })
         });
     }

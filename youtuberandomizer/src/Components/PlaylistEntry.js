@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { fetchPlaylistInfo, fetchPlaylistsInfo, fetchVideos, removePlaylist, setFetchError, setVideo, setFinishedLoading } from '../Actions/action';
+import { fetchPlaylistInfo, fetchPlaylistsInfo, fetchVideos, removePlaylist, setFetchError, setVideo } from '../Actions/action';
 
 class PlaylistEntry extends Component {
 
@@ -176,7 +176,6 @@ const mapDispatchToProps = (dispatch) => {
         removePlaylist: (id) => dispatch(removePlaylist(id)),
         setFetchError: (error) => dispatch(setFetchError(error)),
         setVideo: (id, enabled) => dispatch(setVideo(id, enabled)),
-        setFinishedLoading: (isFinishedLoading) => dispatch(setFinishedLoading(isFinishedLoading))
     };
 }
 

@@ -4,7 +4,6 @@ const InitialState = {
     isFetchPending: false,
     isFetchSuccess: false,
     isFetchError: null,
-    isFinishedLoading: false,
     playlists: [],
     videos: []
 };
@@ -25,11 +24,6 @@ export default (state = InitialState, action) => {
             return {
                 ...state,
                 isFetchError: action.isFetchError
-            }
-        case SET_FINISHEDLOADING:
-            return {
-                ...state,
-                isFinishedLoading: action.isFinishedLoading
             }
         case SET_VIDEOS:
             return {
