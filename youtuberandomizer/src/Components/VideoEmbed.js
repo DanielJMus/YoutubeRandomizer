@@ -91,7 +91,7 @@ class VideoEmbed extends Component {
         const {videos} = this.props;
         return (
             <div className="video-player">
-                { videos && this.UpdatePlayer() }
+                { videos && this.props.finishedLoading && this.UpdatePlayer() }
                 <div className="video-controls">
                     <input onClick={this.Previous} className="video-control" type="button" value="< Previous"/>
                     <input onClick={this.Shuffle} className="video-control" type="button" value="Reshuffle"/>
@@ -106,7 +106,7 @@ class VideoEmbed extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setVideos: (videos) => dispatch(setVideos(videos))
+        setVideos: (videos) => dispatch(setVideos(videos)),
     };
 }
 
@@ -114,7 +114,8 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
     return {
         videos: state.videos,
-        playlists: state.playlists
+        playlists: state.playlists,
+        finishedLoading: state.isFinishedLoading
     };
 }
 

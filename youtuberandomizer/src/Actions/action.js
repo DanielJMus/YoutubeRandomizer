@@ -7,6 +7,7 @@ export const SET_VIDEOS = 'SET_VIDEOS';
 export const ADD_PLAYLIST = 'ADD_PLAYLIST';
 export const DELETE_PLAYLIST = 'DELETE_PLAYLIST';
 export const SET_VIDEO = 'SET_VIDEO';
+export const SET_FINISHEDLOADING = 'SET_FINISHEDLOADING';
 
 export function setFetchPending (isFetchPending) {
     return {
@@ -26,6 +27,13 @@ export function setFetchError (isFetchError) {
     return {
         type: FETCH_ERROR,
         isFetchError
+    };
+}
+
+export function setFinishedLoading (isFinishedLoading) {
+    return {
+        type: SET_FINISHEDLOADING,
+        isFinishedLoading
     };
 }
 
@@ -66,6 +74,39 @@ export function removePlaylist (index) {
     }
 }
 
+export function fetchPlaylistsInfo (playlists) {
+    return dispatch => {
+        return new Promise((resolve, reject) => {
+        dispatch(setFetchPending(true));
+        dispatch(setFetchSuccess(false));
+        dispatch(setFetchError(null));
+        let index = 0;
+        for(var i = 0; i < playlists.length; i++)
+        {
+            sendPlaylistRequest(playlists[i])
+            .then(playlist => {
+                dispatch(addPlaylist(playlist));
+                index++;
+                // console.log(i + ", " + (playlists.length - 1));
+                if(index > playlists.length - 1) {
+                    dispatch(setFetchPending(false));
+                    dispatch(setFetchSuccess(true));
+                    dispatch(setFinishedLoading(true));
+                    resolve();
+                }
+            })
+            .catch(error => {
+                dispatch(setFetchPending(false));
+                dispatch(setFetchError(error));
+                dispatch(setFinishedLoading(true));
+                reject();
+            })
+        }
+    });
+
+    }
+}
+
 export function fetchPlaylistInfo (playlistId) {
     return dispatch => {
         return new Promise((resolve, reject) => {
@@ -78,11 +119,13 @@ export function fetchPlaylistInfo (playlistId) {
                 dispatch(setFetchPending(false));
                 dispatch(setFetchSuccess(true));
                 dispatch(addPlaylist(playlist));
+                dispatch(setFinishedLoading(true));
                 resolve();
             })
             .catch(error => {
                 dispatch(setFetchPending(false));
                 dispatch(setFetchError(error));
+                dispatch(setFinishedLoading(true));
             })
         });
     }

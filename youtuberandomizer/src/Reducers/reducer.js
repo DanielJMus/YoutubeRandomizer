@@ -1,9 +1,10 @@
-import { FETCH_PENDING, FETCH_SUCCESS, FETCH_ERROR, SET_VIDEOS, ADD_PLAYLIST, DELETE_PLAYLIST, SET_VIDEO } from '../Actions/action';
+import { FETCH_PENDING, FETCH_SUCCESS, FETCH_ERROR, SET_VIDEOS, ADD_PLAYLIST, DELETE_PLAYLIST, SET_VIDEO, SET_FINISHEDLOADING } from '../Actions/action';
 
 const InitialState = {
     isFetchPending: false,
     isFetchSuccess: false,
     isFetchError: null,
+    isFinishedLoading: false,
     playlists: [],
     videos: []
 };
@@ -24,6 +25,11 @@ export default (state = InitialState, action) => {
             return {
                 ...state,
                 isFetchError: action.isFetchError
+            }
+        case SET_FINISHEDLOADING:
+            return {
+                ...state,
+                isFinishedLoading: action.isFinishedLoading
             }
         case SET_VIDEOS:
             return {

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { fetchPlaylistInfo, fetchVideos, removePlaylist, setFetchError, setVideo } from '../Actions/action';
+import { fetchPlaylistInfo, fetchPlaylistsInfo, fetchVideos, removePlaylist, setFetchError, setVideo, setFinishedLoading } from '../Actions/action';
 
 class PlaylistEntry extends Component {
 
@@ -22,9 +22,7 @@ class PlaylistEntry extends Component {
         if(!url) return;
         if(url.includes("&")) {
             let lists = url.split("&");
-            for(var i = 0; i < lists.length; i++) {
-                this.addPlaylist(lists[i]);
-            }
+            this.addPlaylists(lists);
         } else {
             // Only one playlist to add
             this.addPlaylist(url);
@@ -42,6 +40,14 @@ class PlaylistEntry extends Component {
             return;
         }
         this.addPlaylist(id);
+    }
+
+    addPlaylists (ids) {
+        this.props.fetchPlaylistsInfo(ids).then(() => {
+            console.log(this.props.playlists);
+            this.refreshURLParams();
+            this.props.fetchVideos(this.props.playlists);
+        });
     }
 
     addPlaylist (id) {
@@ -165,10 +171,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchPlaylistInfo: (url) => dispatch(fetchPlaylistInfo(url)),
+        fetchPlaylistsInfo: (playlists) => dispatch(fetchPlaylistsInfo(playlists)),
         fetchVideos: (url) => dispatch(fetchVideos(url)),
         removePlaylist: (id) => dispatch(removePlaylist(id)),
         setFetchError: (error) => dispatch(setFetchError(error)),
-        setVideo: (id, enabled) => dispatch(setVideo(id, enabled))
+        setVideo: (id, enabled) => dispatch(setVideo(id, enabled)),
+        setFinishedLoading: (isFinishedLoading) => dispatch(setFinishedLoading(isFinishedLoading))
     };
 }
 
