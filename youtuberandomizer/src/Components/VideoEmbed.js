@@ -37,6 +37,7 @@ class VideoEmbed extends Component {
 
     Shuffle = () => {
         this.props.setVideos(this.props.videos.sort(() => Math.random() - 0.5));
+        this.SetVideoIndex(0);
     }
 
     SetVideoIndex (index) {
@@ -68,6 +69,7 @@ class VideoEmbed extends Component {
             }
             console.log(this.player);
             this.player.loadVideoById(this.props.videos[this.state.index].id);
+            document.title = this.props.videos[this.state.index].title;
         }
     }
 

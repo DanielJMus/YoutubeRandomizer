@@ -24,6 +24,7 @@
 }
 
 .playlist-add {
+  font-weight:bold;
   float:right;
   padding: 0px;
   width:20%;
