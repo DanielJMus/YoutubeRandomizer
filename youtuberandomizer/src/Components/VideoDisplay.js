@@ -23,8 +23,10 @@ class VideoDisplay extends Component {
             <div className="video-container">
                 {this.props.videos && this.props.videos.length > 0 &&
                 <div className="video-list">
-                    <h3>Current Videos:</h3>
+                    <h3>Playlist:</h3>
+                    <div className="video-items">
                     {this.ListVideos()}
+                    </div>
                 </div>
                 }
             </div>

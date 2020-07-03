@@ -172,7 +172,15 @@
 }
 
 .video-list {
+  margin: 0 auto;
+  width:640px;
   margin-bottom:20px;
+
+}
+
+.video-items {
+  height:600px;
+  overflow-y:scroll;
 }
 
 ::-webkit-scrollbar {
@@ -253,6 +261,12 @@
 
   .title {
     display: none;
+  }
+
+  .video-player {
+    position: absolute;
+    width:100%;
+    top:0px;
   }
 
   .video-controls {

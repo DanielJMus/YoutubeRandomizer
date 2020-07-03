@@ -9,8 +9,8 @@ function App() {
     <div className="App">
       <h1 className="title">A Better Youtube Shuffler</h1>
       <br></br>
-      <PlaylistEntry/>
       <VideoEmbed/>
+      <PlaylistEntry/>
       <VideoDisplay/>
     </div>
   );
